@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { create, getAll } from "./services/diaryService";
-import type { DiaryEntry, NewDiaryEntry } from "./types";
+import type { DiaryEntry, NewDiaryEntry, Visibility, Weather } from "./types";
+import axios from "axios";
 
 function App() {
   const [diaries, setDiaries] = useState<DiaryEntry[]>([]);
@@ -8,6 +9,7 @@ function App() {
   const [weather, setWeather] = useState("");
   const [visibility, setVisibility] = useState("");
   const [comment, setComment] = useState("");
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     getAll().then((data) => setDiaries(data));
@@ -15,26 +17,44 @@ function App() {
 
   const addDiary = async (e: React.SyntheticEvent) => {
     e.preventDefault();
+    setError(null);
 
     const newEntry: NewDiaryEntry = {
       date,
-      weather: weather as any,
-      visibility: visibility as any,
+      weather: weather as Weather,
+      visibility: visibility as Visibility,
       comment,
     };
 
-    const saved = await create(newEntry);
-    setDiaries(diaries.concat(saved));
+    try {
+      const saved = await create(newEntry);
+      setDiaries(diaries.concat(saved));
 
-    setDate("");
-    setWeather("");
-    setVisibility("");
-    setComment("");
+      setDate("");
+      setWeather("");
+      setVisibility("");
+      setComment("");
+    } catch (err: unknown) {
+      if (axios.isAxiosError(err)) {
+        const data = err.response.data;
+        const message = data.error
+          .map((e) => e.message ?? String(e))
+          .join("\n");
+
+        setError(message || "Unknown axios error");
+      } else {
+        setError("Something went wrong");
+      }
+    }
   };
 
   return (
     <div>
       <h1>Flight Diaries</h1>
+
+      {error && (
+        <div style={{ color: "red", marginBottom: "1rem" }}>{error}</div>
+      )}
 
       <h2>Add new entry</h2>
       <form onSubmit={addDiary}>
