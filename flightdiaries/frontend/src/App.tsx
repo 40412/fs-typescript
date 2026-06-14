@@ -59,18 +59,42 @@ function App() {
       <h2>Add new entry</h2>
       <form onSubmit={addDiary}>
         <div>
-          date: <input value={date} onChange={(e) => setDate(e.target.value)} />
-        </div>
-        <div>
-          weather:{" "}
-          <input value={weather} onChange={(e) => setWeather(e.target.value)} />
-        </div>
-        <div>
-          visibility:{" "}
+          date:{" "}
           <input
-            value={visibility}
-            onChange={(e) => setVisibility(e.target.value)}
+            type="date"
+            value={date}
+            onChange={(e) => setDate(e.target.value)}
           />
+        </div>
+        <div>
+          <span>weather: </span>
+          {["sunny", "rainy", "cloudy", "stormy", "windy"].map((w) => (
+            <label key={w} style={{ marginRight: "1rem" }}>
+              <input
+                type="radio"
+                name="weather"
+                value={w}
+                checked={weather === w}
+                onChange={() => setWeather(w)}
+              />
+              {w}
+            </label>
+          ))}
+        </div>
+        <div>
+          <span>visibility: </span>
+          {["great", "good", "ok", "poor"].map((v) => (
+            <label key={v} style={{ marginRight: "1rem" }}>
+              <input
+                type="radio"
+                name="visibility"
+                value={v}
+                checked={visibility === v}
+                onChange={() => setVisibility(v)}
+              />
+              {v}
+            </label>
+          ))}
         </div>
         <div>
           comment:{" "}
