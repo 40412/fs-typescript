@@ -2,6 +2,7 @@ import express from "express";
 import {
   addPatient,
   getNonSensitivePatients,
+  getPatientById,
 } from "../services/patientService.ts";
 import { toNewPatientEntry } from "../validators/patientValidator.ts";
 import { ZodError } from "zod";
@@ -10,6 +11,16 @@ const router = express.Router();
 
 router.get("/", (_req, res) => {
   res.send(getNonSensitivePatients());
+});
+
+router.get("/:id", (req, res) => {
+  const patient = getPatientById(req.params.id);
+
+  if (!patient) {
+    return res.status(404).send({ error: "Patient not found" });
+  }
+
+  return res.json(patient);
 });
 
 router.post("/", (req, res) => {
