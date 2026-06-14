@@ -35,7 +35,7 @@ const HospitalDetails = ({ entry }: { entry: HospitalEntry }) => (
     </Typography>
     <Typography>{entry.description}</Typography>
     <Typography variant="body2">
-      Discharge: {entry.discharge.date} – {entry.discharge.criteria}
+      Discharge: {entry.discharge.date} - {entry.discharge.criteria}
     </Typography>
   </Box>
 );
@@ -52,7 +52,7 @@ const OccupationalDetails = ({
     <Typography>{entry.description}</Typography>
     {entry.sickLeave && (
       <Typography variant="body2">
-        Sick leave: {entry.sickLeave.startDate} – {entry.sickLeave.endDate}
+        Sick leave: {entry.sickLeave.startDate} - {entry.sickLeave.endDate}
       </Typography>
     )}
   </Box>

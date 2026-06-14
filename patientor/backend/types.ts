@@ -65,6 +65,12 @@ export type Entry =
   | OccupationalHealthcareEntry
   | HealthCheckEntry;
 
+type UnionOmit<T, K extends string | number | symbol> = T extends unknown
+  ? Omit<T, K>
+  : never;
+
+export type EntryWithoutId = UnionOmit<Entry, "id">;
+
 export type NonSensitivePatient = Omit<Patient, "ssn" | "entries">;
 export type NewPatient = Omit<Patient, "id" | "entries">;
 export type Gender = (typeof Gender)[keyof typeof Gender];
