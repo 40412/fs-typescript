@@ -4,12 +4,16 @@ import { Typography } from "@mui/material";
 import MaleIcon from "@mui/icons-material/Male";
 import FemaleIcon from "@mui/icons-material/Female";
 import TransgenderIcon from "@mui/icons-material/Transgender";
-import { Patient } from "../types";
+import { Diagnosis, Patient } from "../types";
 import patientService from "../services/patients";
+import axios from "axios";
+import { apiBaseUrl } from "../constants";
+import EntryDetails from "./EntryDetails";
 
 const PatientPage = () => {
   const { id } = useParams();
   const [patient, setPatient] = useState<Patient | null>(null);
+  const [diagnoses, setDiagnoses] = useState<Diagnosis[]>([]);
 
   useEffect(() => {
     const fetchPatient = async () => {
@@ -19,6 +23,19 @@ const PatientPage = () => {
     };
     void fetchPatient();
   }, [id]);
+
+  useEffect(() => {
+    const fetchDiagnoses = async () => {
+      const { data } = await axios.get<Diagnosis[]>(`${apiBaseUrl}/diagnoses`);
+      setDiagnoses(data);
+      console.log(diagnoses);
+    };
+
+    void fetchDiagnoses();
+  }, []);
+
+  const getDiagnosisName = (code: string) =>
+    diagnoses.find((d) => d.code === code)?.name;
 
   if (!patient) return <div>Loading...</div>;
 
@@ -43,6 +60,18 @@ const PatientPage = () => {
       </Typography>
 
       {patient.entries.length === 0 && <p>No entries yet.</p>}
+
+      {patient.entries.map((entry) => (
+        <div key={entry.id} style={{ marginBottom: "1rem" }}>
+          <Typography variant="subtitle1">{entry.date}</Typography>
+
+          <Typography>{entry.description}</Typography>
+
+          {patient.entries.map((entry) => (
+            <EntryDetails key={entry.id} entry={entry} />
+          ))}
+        </div>
+      ))}
     </div>
   );
 };
