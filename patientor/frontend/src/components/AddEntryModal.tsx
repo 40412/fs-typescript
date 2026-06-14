@@ -225,7 +225,7 @@ const AddEntryModal = ({
       <DialogActions>
         <Button onClick={onClose}>Cancel</Button>
         <Button variant="contained" onClick={submit}>
-          Add
+          Add New Entry
         </Button>
       </DialogActions>
     </Dialog>

@@ -25,6 +25,7 @@ const HealthCheckDetails = ({ entry }: { entry: HealthCheckEntry }) => (
     </Typography>
     <Typography>{entry.description}</Typography>
     <FavoriteIcon color={entry.healthCheckRating === 0 ? "success" : "error"} />
+    <Typography>Diagnose by {entry.specialist}</Typography>
   </Box>
 );
 

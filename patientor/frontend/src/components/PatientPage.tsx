@@ -88,7 +88,7 @@ const PatientPage = () => {
 
       {patient.entries.length === 0 && <p>No entries yet.</p>}
 
-      {patient.entries.map((entry) => (
+      {/* {patient.entries.map((entry) => (
         <div key={entry.id} style={{ marginBottom: "1rem" }}>
           <Typography variant="subtitle1">{entry.date}</Typography>
 
@@ -98,6 +98,10 @@ const PatientPage = () => {
             <EntryDetails key={entry.id} entry={entry} />
           ))}
         </div>
+      ))} */}
+
+      {patient.entries.map((entry) => (
+        <EntryDetails key={entry.id} entry={entry} />
       ))}
 
       <AddEntryModal
@@ -109,7 +113,7 @@ const PatientPage = () => {
       />
 
       <Button variant="contained" onClick={() => setModalOpen(true)}>
-        Add Entry
+        Add New Entry
       </Button>
     </div>
   );
