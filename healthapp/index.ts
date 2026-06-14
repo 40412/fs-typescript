@@ -29,6 +29,10 @@ app.get("/bmi", (req, res) => {
 });
 
 app.post("/exercises", (req, res) => {
+  /* eslint-disable @typescript-eslint/no-unsafe-assignment,
+                    @typescript-eslint/no-unsafe-member-access,
+                    @typescript-eslint/no-unsafe-argument,
+                    @typescript-eslint/no-unsafe-call */
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const body: any = req.body;
 
@@ -50,6 +54,10 @@ app.post("/exercises", (req, res) => {
   const result = calculateExercises(daily, target);
 
   return res.send(result);
+  /* eslint-enable @typescript-eslint/no-unsafe-assignment,
+                    @typescript-eslint/no-unsafe-member-access,
+                    @typescript-eslint/no-unsafe-argument, 
+                    @typescript-eslint/no-unsafe-call */
 });
 
 const PORT = 3000;
