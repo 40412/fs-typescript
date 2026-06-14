@@ -3,7 +3,7 @@ import {
   addPatient,
   getNonSensitivePatients,
 } from "../services/patientService.ts";
-import type { NewPatient } from "../types.ts";
+import { toNewPatientEntry } from "../utils.ts";
 
 const router = express.Router();
 
@@ -12,8 +12,20 @@ router.get("/", (_req, res) => {
 });
 
 router.post("/", (req, res) => {
+  try {
+    const newPatient = toNewPatientEntry(req.body);
+    const added = addPatient(newPatient);
+    res.json(added);
+  } catch (error: unknown) {
+    let message = "Something went wrong.";
+    if (error instanceof Error) {
+      message += " Error: " + error.message;
+    }
+    res.status(400).send(message);
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const body: any = req.body;
+  /*  const body: any = req.body;
 
   const newPatient: NewPatient = {
     name: body.name,
@@ -24,7 +36,7 @@ router.post("/", (req, res) => {
   };
 
   const added = addPatient(newPatient);
-  res.json(added);
+  res.json(added); */
 });
 
 export default router;

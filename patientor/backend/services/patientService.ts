@@ -14,7 +14,7 @@ export const getNonSensitivePatients = (): NonSensitivePatient[] => {
 };
 
 export const addPatient = (entry: NewPatient): Patient => {
-  const newPatient: Patient = {
+  const newPatient = {
     id: uuid(),
     entries: [],
     ...entry,
