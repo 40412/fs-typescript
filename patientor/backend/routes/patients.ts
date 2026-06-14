@@ -3,7 +3,8 @@ import {
   addPatient,
   getNonSensitivePatients,
 } from "../services/patientService.ts";
-import { toNewPatientEntry } from "../utils.ts";
+import { toNewPatientEntry } from "../validators/patientValidator.ts";
+import { ZodError } from "zod";
 
 const router = express.Router();
 
@@ -15,28 +16,13 @@ router.post("/", (req, res) => {
   try {
     const newPatient = toNewPatientEntry(req.body);
     const added = addPatient(newPatient);
-    res.json(added);
+    return res.json(added);
   } catch (error: unknown) {
-    let message = "Something went wrong.";
-    if (error instanceof Error) {
-      message += " Error: " + error.message;
+    if (error instanceof ZodError) {
+      return res.status(400).json(error.issues);
     }
-    res.status(400).send(message);
+    return res.status(400).send("Invalid data");
   }
-
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  /*  const body: any = req.body;
-
-  const newPatient: NewPatient = {
-    name: body.name,
-    dateOfBirth: body.dateOfBirth,
-    ssn: body.ssn,
-    gender: body.gender,
-    occupation: body.occupation,
-  };
-
-  const added = addPatient(newPatient);
-  res.json(added); */
 });
 
 export default router;
